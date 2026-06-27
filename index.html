@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subhra Nandi — Portfolio</title>
+<meta name="description" content="Subhra Nandi — AI & Robotics engineer-in-training. Backend systems, AI agents, and open-source work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#05060f;
+    --bg-panel:#0d1126;
+    --bg-panel-soft:rgba(13,17,38,0.55);
+    --violet:#8b5cf6;
+    --magenta:#c026d3;
+    --solar-gold:#fbbf24;
+    --solar-amber:#f97316;
+    --star:#f1f5f9;
+    --muted:#94a3b8;
+    --cyan:#22d3ee;
+    --border:rgba(255,255,255,0.09);
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg-deep);
+    color:var(--star);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit;text-decoration:none;}
+
+  :focus-visible{
+    outline:2px solid var(--solar-gold);
+    outline-offset:3px;
+  }
+
+  /* ---------- Backdrop layers ---------- */
+
+  #stars{
+    position:fixed;
+    inset:0;
+    z-index:-3;
+    background:var(--bg-deep);
+  }
+
+  .nebula{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(70px);
+    mix-blend-mode:screen;
+    opacity:0.5;
+    z-index:-2;
+    pointer-events:none;
+  }
+  .nebula.violet{
+    width:50vw;height:50vw;
+    top:-10vw;left:-15vw;
+    background:radial-gradient(circle, var(--violet), transparent 70%);
+    animation:drift1 50s ease-in-out infinite alternate;
+  }
+  .nebula.magenta{
+    width:45vw;height:45vw;
+    bottom:-15vw;right:-10vw;
+    background:radial-gradient(circle, var(--magenta), transparent 70%);
+    animation:drift2 60s ease-in-out infinite alternate;
+  }
+  .nebula.solar{
+    width:38vw;height:38vw;
+    top:8vh;left:50%;
+    transform:translateX(-50%);
+    background:radial-gradient(circle, var(--solar-amber), transparent 70%);
+    opacity:0.35;
+    animation:pulseSolar 7s ease-in-out infinite;
+  }
+
+  @keyframes drift1{
+    0%{transform:translate(0,0);}
+    100%{transform:translate(6vw,8vh);}
+  }
+  @keyframes drift2{
+    0%{transform:translate(0,0);}
+    100%{transform:translate(-5vw,-7vh);}
+  }
+  @keyframes pulseSolar{
+    0%,100%{opacity:0.28;transform:translateX(-50%) scale(1);}
+    50%{opacity:0.42;transform:translateX(-50%) scale(1.08);}
+  }
+
+  /* ---------- Top bar ---------- */
+
+  header{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:50;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 6vw;
+    backdrop-filter:blur(10px);
+    background:linear-gradient(to bottom, rgba(5,6,15,0.7), transparent);
+  }
+  .monogram{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.3rem;
+    background:linear-gradient(120deg, var(--solar-gold), var(--magenta));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    letter-spacing:0.02em;
+  }
+  .header-links{
+    display:flex;
+    gap:20px;
+    align-items:center;
+  }
+  .header-links a{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    color:var(--muted);
+    transition:color 0.2s;
+  }
+  .header-links a:hover{color:var(--cyan);}
+  .header-links .pill{
+    border:1px solid var(--border);
+    padding:7px 16px;
+    border-radius:999px;
+    color:var(--star);
+  }
+  .header-links .pill:hover{
+    border-color:var(--solar-gold);
+    color:var(--solar-gold);
+  }
+
+  /* ---------- Side dot nav ---------- */
+
+  #dotnav{
+    position:fixed;
+    right:28px;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:40;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+  }
+  #dotnav .line{
+    width:1px;
+    flex:1;
+    background:var(--border);
+  }
+  #dotnav button{
+    width:9px;height:9px;
+    border-radius:50%;
+    border:1px solid var(--muted);
+    background:transparent;
+    cursor:pointer;
+    position:relative;
+    padding:0;
+    transition:background 0.25s, border-color 0.25s, transform 0.25s;
+  }
+  #dotnav button.active{
+    background:var(--solar-gold);
+    border-color:var(--solar-gold);
+    transform:scale(1.3);
+  }
+  #dotnav button .tip{
+    position:absolute;
+    right:22px;
+    top:50%;
+    transform:translateY(-50%);
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    color:var(--star);
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    padding:4px 10px;
+    border-radius:6px;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.2s;
+  }
+  #dotnav button:hover .tip,
+  #dotnav button:focus-visible .tip{opacity:1;}
+
+  @media (max-width:900px){
+    #dotnav{display:none;}
+  }
+
+  /* ---------- Layout helpers ---------- */
+
+  section{
+    position:relative;
+    z-index:1;
+    padding:120px 6vw;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  @media (max-width:720px){
+    section{padding:80px 6vw;}
+  }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--solar-gold);
+    margin-bottom:14px;
+  }
+  h2{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(1.8rem, 3.6vw, 2.6rem);
+    margin-bottom:16px;
+  }
+  .lede{
+    color:var(--muted);
+    max-width:640px;
+    font-size:1.02rem;
+    margin-bottom:48px;
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.in-view{
+    opacity:1;
+    transform:translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    .nebula{animation:none;}
+  }
+
+  /* ---------- Hero ---------- */
+
+  #home{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:120px;
+  }
+  .hero-tag{
+    font-family:var(--font-mono);
+    color:var(--muted);
+    font-size:0.92rem;
+    margin-bottom:18px;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(2.8rem, 9vw, 6rem);
+    line-height:1.02;
+    background:linear-gradient(100deg, var(--solar-gold) 10%, var(--magenta) 55%, var(--violet) 90%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin-bottom:22px;
+  }
+  .hero-desc{
+    max-width:560px;
+    color:var(--muted);
+    font-size:1.08rem;
+    margin-bottom:36px;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:40px;
+  }
+  .btn-primary, .btn-ghost{
+    font-family:var(--font-body);
+    font-weight:500;
+    font-size:0.95rem;
+    padding:13px 26px;
+    border-radius:10px;
+    transition:transform 0.2s, box-shadow 0.2s, border-color 0.2s, color 0.2s;
+    display:inline-block;
+  }
+  .btn-primary{
+    background:linear-gradient(100deg, var(--solar-amber), var(--magenta));
+    color:#0a0a12;
+    font-weight:600;
+  }
+  .btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 28px -8px var(--solar-amber);
+  }
+  .btn-ghost{
+    border:1px solid var(--border);
+    color:var(--star);
+  }
+  .btn-ghost:hover{
+    border-color:var(--cyan);
+    color:var(--cyan);
+    transform:translateY(-2px);
+  }
+  .hero-contacts{
+    display:flex;
+    gap:18px;
+  }
+  .hero-contacts a{
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    transition:color 0.2s;
+  }
+  .hero-contacts a:hover{color:var(--solar-gold);}
+  .hero-contacts svg{width:16px;height:16px;}
+
+  /* ---------- Cards ---------- */
+
+  .card-grid{
+    display:grid;
+    gap:24px;
+    grid-template-columns:repeat(3, 1fr);
+  }
+  .card-grid.two{grid-template-columns:repeat(2, 1fr);}
+  .card-grid.skills{grid-template-columns:repeat(3, 1fr);}
+  @media (max-width:980px){
+    .card-grid, .card-grid.two, .card-grid.skills{grid-template-columns:1fr;}
+  }
+
+  .card{
+    background:var(--bg-panel-soft);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:30px;
+    backdrop-filter:blur(6px);
+    transition:border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .card:hover{
+    border-color:var(--violet);
+    transform:translateY(-4px);
+    box-shadow:0 16px 40px -20px var(--violet);
+  }
+  .card .pr-tag{
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    color:var(--cyan);
+    margin-bottom:10px;
+    display:block;
+  }
+  .card h3{
+    font-family:var(--font-display);
+    font-size:1.18rem;
+    font-weight:600;
+    margin-bottom:12px;
+  }
+  .card p{
+    color:var(--muted);
+    font-size:0.94rem;
+    margin-bottom:14px;
+  }
+  .card .impact{
+    font-size:0.88rem;
+    color:var(--star);
+    border-left:2px solid var(--solar-gold);
+    padding-left:12px;
+  }
+
+  .tag-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    margin-top:28px;
+  }
+  .tag{
+    font-family:var(--font-mono);
+    font-size:0.76rem;
+    padding:6px 12px;
+    border-radius:999px;
+    background:rgba(139,92,246,0.12);
+    border:1px solid rgba(139,92,246,0.3);
+    color:var(--cyan);
+  }
+
+  /* ---------- Project cards ---------- */
+
+  .project-card{
+    background:var(--bg-panel-soft);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:34px;
+    transition:border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .project-card:hover{
+    border-color:var(--magenta);
+    transform:translateY(-4px);
+    box-shadow:0 16px 40px -20px var(--magenta);
+  }
+  .project-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:6px;
+  }
+  .project-card h3{
+    font-family:var(--font-display);
+    font-size:1.3rem;
+    font-weight:600;
+  }
+  .badge{
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    color:var(--solar-gold);
+    border:1px solid rgba(251,191,36,0.4);
+    padding:4px 10px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .project-card .subtitle{
+    color:var(--muted);
+    font-family:var(--font-mono);
+    font-size:0.84rem;
+    margin-bottom:18px;
+  }
+  .project-card ul{
+    list-style:none;
+    margin-bottom:8px;
+  }
+  .project-card li{
+    color:var(--muted);
+    font-size:0.92rem;
+    margin-bottom:10px;
+    padding-left:18px;
+    position:relative;
+  }
+  .project-card li::before{
+    content:"";
+    position:absolute;
+    left:0;top:9px;
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--solar-gold);
+  }
+  .project-links{
+    display:flex;
+    gap:18px;
+    margin-top:20px;
+  }
+  .project-links a{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    color:var(--cyan);
+    border-bottom:1px solid transparent;
+    transition:border-color 0.2s;
+  }
+  .project-links a:hover{border-color:var(--cyan);}
+
+  /* ---------- Skills ---------- */
+
+  .skill-card h3{
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--solar-gold);
+    margin-bottom:16px;
+  }
+  .skill-card .tag-row{margin-top:0;}
+
+  /* ---------- Education ---------- */
+
+  .edu-row{
+    display:flex;
+    gap:28px;
+    align-items:flex-start;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:32px;
+    background:var(--bg-panel-soft);
+  }
+  .edu-row .orbit-dot{
+    width:14px;height:14px;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--solar-gold), var(--solar-amber));
+    margin-top:8px;
+    flex:none;
+    box-shadow:0 0 16px var(--solar-gold);
+  }
+  .edu-row h3{
+    font-family:var(--font-display);
+    font-size:1.25rem;
+    margin-bottom:6px;
+  }
+  .edu-row p{color:var(--muted);font-size:0.95rem;}
+  .edu-row .gpa{
+    color:var(--cyan);
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    margin-top:8px;
+    display:block;
+  }
+
+  /* ---------- Achievements ---------- */
+
+  .ach-list{
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:var(--bg-panel-soft);
+    overflow:hidden;
+  }
+  .ach-item{
+    display:flex;
+    gap:18px;
+    padding:26px 30px;
+    border-bottom:1px solid var(--border);
+  }
+  .ach-item:last-child{border-bottom:none;}
+  .ach-item .star-icon{
+    flex:none;
+    color:var(--solar-gold);
+    font-size:1.1rem;
+    margin-top:2px;
+  }
+  .ach-item strong{font-family:var(--font-display);font-weight:600;}
+  .ach-item p{color:var(--muted);font-size:0.92rem;margin-top:4px;}
+
+  /* ---------- Contact / Footer ---------- */
+
+  #contact{text-align:center;}
+  #contact .lede{margin:0 auto 36px;}
+  #contact .btn-primary{font-size:1rem;padding:15px 34px;}
+  footer{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    padding:40px 6vw 60px;
+    color:var(--muted);
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+  }
+  footer .foot-links{
+    display:flex;
+    justify-content:center;
+    gap:22px;
+    margin-bottom:18px;
+  }
+  footer .foot-links a{
+    color:var(--star);
+    transition:color 0.2s;
+  }
+  footer .foot-links a:hover{color:var(--solar-gold);}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<div class="nebula violet"></div>
+<div class="nebula magenta"></div>
+<div class="nebula solar"></div>
+
+<header>
+  <div class="monogram">SN</div>
+  <div class="header-links">
+    <a href="https://github.com/Subhra-Nandi" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/subhra-nandi" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="pill" href="mailto:subhranandi20@gmail.com">Say hello</a>
+  </div>
+</header>
+
+<nav id="dotnav" aria-label="Section navigation">
+  <button data-target="home" class="active" aria-label="Home"><span class="tip">Home</span></button>
+  <div class="line"></div>
+  <button data-target="opensource" aria-label="Open Source"><span class="tip">Open Source</span></button>
+  <div class="line"></div>
+  <button data-target="projects" aria-label="Projects"><span class="tip">Projects</span></button>
+  <div class="line"></div>
+  <button data-target="skills" aria-label="Skills"><span class="tip">Skills</span></button>
+  <div class="line"></div>
+  <button data-target="education" aria-label="Education"><span class="tip">Education</span></button>
+  <div class="line"></div>
+  <button data-target="achievements" aria-label="Achievements"><span class="tip">Achievements</span></button>
+  <div class="line"></div>
+  <button data-target="contact" aria-label="Contact"><span class="tip">Contact</span></button>
+</nav>
+
+<section id="home">
+  <div class="hero-tag">Kolkata, West Bengal, India</div>
+  <h1>SUBHRA NANDI</h1>
+  <p class="hero-desc">B.Tech student in AI &amp; Robotics. I build backend systems and AI agents — async APIs, vector pipelines, real-time data — and ship them end to end, from database schema to deployed dashboard.</p>
+  <div class="hero-ctas">
+    <a class="btn-primary" href="#projects">View my work</a>
+    <a class="btn-ghost" href="mailto:subhranandi20@gmail.com">Get in touch</a>
+  </div>
+  <div class="hero-contacts">
+    <a href="mailto:subhranandi20@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6l9 6 9-6M3 6h18v12H3V6z"/></svg>
+      subhranandi20@gmail.com
+    </a>
+    <a href="https://github.com/Subhra-Nandi" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5 3.2 9.2 7.7 10.7.6.1.8-.3.8-.6v-2.2c-3.1.7-3.8-1.5-3.8-1.5-.5-1.3-1.2-1.7-1.2-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.6 1.2 3.2.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.2-5.1-5.5 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.7.2 2.9.1 3.2.7.8 1.1 1.8 1.1 3 0 4.3-2.6 5.2-5.1 5.5.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/></svg>
+      GitHub
+    </a>
+    <a href="https://linkedin.com/in/subhra-nandi" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.4h-3.5v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.4v1.6h.1c.5-.9 1.6-1.9 3.3-1.9 3.5 0 4.2 2.3 4.2 5.3v6.4zM5.3 7.4A2 2 0 1 1 5.3 3.4a2 2 0 0 1 0 4zM7 20.4H3.6V9H7v11.4z"/></svg>
+      LinkedIn
+    </a>
+  </div>
+</section>
+
+<section id="opensource" class="reveal">
+  <div class="eyebrow">Open Source · hushh-labs / hushh-research</div>
+  <h2>Shipping inside someone else's codebase</h2>
+  <p class="lede">Three pull requests, three different problems — voice identity, secure data writes, and instant decision UI.</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <span class="pr-tag">PR #148</span>
+      <h3>Kai Voice Agent System Prompt</h3>
+      <p>Engineered a strict five-section system prompt that locks down identity, scopes vault data access, verifies consent, and keeps responses under 40 words for voice.</p>
+      <p class="impact">Eliminated off-topic responses and made consent-first data access the default.</p>
+    </div>
+    <div class="card">
+      <span class="pr-tag">PR #374</span>
+      <h3>KYC Artifact Write Path &amp; UI</h3>
+      <p>Built a secure write path for KYC data with token enforcement, then wired the React onboarding flow to live PKM vault data — no more hardcoded states.</p>
+      <p class="impact">Enabled real-time verification tracking with encrypted, audit-trailed storage.</p>
+    </div>
+    <div class="card">
+      <span class="pr-tag">PR #138</span>
+      <h3>Frictionless Verdict UI</h3>
+      <p>Built a React component that surfaces an instant Buy / Hold / Sell verdict straight from existing data — no new API calls required.</p>
+      <p class="impact">Turned a multi-step analysis into a one-tap decision.</p>
+    </div>
+  </div>
+
+  <div class="tag-row">
+    <span class="tag">Python</span>
+    <span class="tag">TypeScript</span>
+    <span class="tag">React</span>
+    <span class="tag">FastAPI</span>
+    <span class="tag">Next.js 14</span>
+  </div>
+</section>
+
+<section id="projects" class="reveal">
+  <div class="eyebrow">Personal Projects</div>
+  <h2>Two systems I designed end to end</h2>
+  <p class="lede">From idea to deployed infrastructure, including the parts nobody asks about until they break.</p>
+
+  <div class="card-grid two">
+    <div class="project-card">
+      <div class="project-head">
+        <h3>LLM-Shield</h3>
+        <span class="badge">Proxy</span>
+      </div>
+      <div class="subtitle">Intelligent LLM Proxy</div>
+      <ul>
+        <li>OpenAI-compatible async proxy handling semantic caching, PII masking, and multi-model failover</li>
+        <li>Redis embedding cache (≥0.92 similarity) cut latency from 8000ms to 1200ms — a 60% cost reduction</li>
+        <li>Atomic token-bucket rate limiting via Redis Lua scripts for strict thread synchronization</li>
+        <li>Non-blocking telemetry streaming to Neon PostgreSQL with Prometheus metrics for reliability tracking</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">FastAPI</span>
+        <span class="tag">Redis (Lua)</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">DeBERTa-v3</span>
+        <span class="tag">Presidio</span>
+        <span class="tag">GPT-4o</span>
+        <span class="tag">Docker</span>
+      </div>
+      <div class="project-links">
+        <a href="#">GitHub →</a>
+        <a href="#">Live Demo →</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-head">
+        <h3>NGO Resource Allocation Platform</h3>
+        <span class="badge">Ongoing</span>
+      </div>
+      <div class="subtitle">Disaster relief, matched by geography</div>
+      <ul>
+        <li>Distributed disaster-relief system matching populations to NGOs via optimized PostGIS spatial queries</li>
+        <li>Async multi-modal ingestion pipeline (Whisper STT + Tesseract OCR) behind a structured GPT-4o agent</li>
+        <li>Two-stage AI validator enforcing authentication and live relational database constraints</li>
+        <li>Admin dashboard using row-level locking to stop concurrent double-allocations</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">FastAPI</span>
+        <span class="tag">PostGIS</span>
+        <span class="tag">GPT-4o</span>
+        <span class="tag">Whisper</span>
+        <span class="tag">Tesseract</span>
+        <span class="tag">Next.js 14</span>
+        <span class="tag">Railway</span>
+        <span class="tag">Vercel</span>
+      </div>
+      <div class="project-links">
+        <a href="#">GitHub →</a>
+        <a href="#">Live Demo →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="reveal">
+  <div class="eyebrow">Skills</div>
+  <h2>Tools &amp; technologies</h2>
+  <p class="lede">Grouped by where they show up — not by how impressive they sound.</p>
+
+  <div class="card-grid skills">
+    <div class="card skill-card">
+      <h3>Languages</h3>
+      <div class="tag-row">
+        <span class="tag">C++</span><span class="tag">C</span><span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">TypeScript</span>
+      </div>
+    </div>
+    <div class="card skill-card">
+      <h3>Backend</h3>
+      <div class="tag-row">
+        <span class="tag">FastAPI</span><span class="tag">Asyncpg</span><span class="tag">SQLAlchemy</span><span class="tag">Alembic</span><span class="tag">Pydantic v2</span><span class="tag">Redis</span><span class="tag">PostgreSQL</span><span class="tag">PostGIS</span>
+      </div>
+    </div>
+    <div class="card skill-card">
+      <h3>AI / ML</h3>
+      <div class="tag-row">
+        <span class="tag">LangChain</span><span class="tag">GPT-4o</span><span class="tag">Gemini</span><span class="tag">DeBERTa-v3</span><span class="tag">Presidio</span><span class="tag">ChromaDB</span><span class="tag">Pinecone</span><span class="tag">Whisper STT</span><span class="tag">RAG</span>
+      </div>
+    </div>
+    <div class="card skill-card">
+      <h3>Frontend</h3>
+      <div class="tag-row">
+        <span class="tag">Next.js 14</span><span class="tag">React</span><span class="tag">Tailwind CSS</span><span class="tag">Zustand</span><span class="tag">Framer Motion</span><span class="tag">Recharts</span><span class="tag">React Leaflet</span>
+      </div>
+    </div>
+    <div class="card skill-card">
+      <h3>DevOps &amp; Tools</h3>
+      <div class="tag-row">
+        <span class="tag">Git</span><span class="tag">GitHub Actions</span><span class="tag">Docker</span><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Railway</span><span class="tag">Vercel</span><span class="tag">Neon</span><span class="tag">Postman</span><span class="tag">Pytest</span>
+      </div>
+    </div>
+    <div class="card skill-card">
+      <h3>CS Fundamentals</h3>
+      <div class="tag-row">
+        <span class="tag">OOP</span><span class="tag">DBMS</span><span class="tag">Operating Systems</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education" class="reveal">
+  <div class="eyebrow">Education</div>
+  <h2>Where this is all happening</h2>
+  <div class="edu-row">
+    <div class="orbit-dot"></div>
+    <div>
+      <h3>Bachelor of Technology — AI &amp; Robotics</h3>
+      <p>University of Engineering and Management, Kolkata</p>
+      <span class="gpa">Expected July 2028 · GPA 8.17</span>
+    </div>
+  </div>
+</section>
+
+<section id="achievements" class="reveal">
+  <div class="eyebrow">Achievements</div>
+  <h2>Along the way</h2>
+  <div class="ach-list">
+    <div class="ach-item">
+      <span class="star-icon">✦</span>
+      <div>
+        <strong>GirlScript Summer of Code (GSSoC) 2026</strong>
+        <p>Merged 11 pull requests across diverse open-source repositories.</p>
+      </div>
+    </div>
+    <div class="ach-item">
+      <span class="star-icon">✦</span>
+      <div>
+        <strong>Hushh Weekly Open Source Champion</strong>
+        <p>Ranked 8th globally among the top contributors to Hushh repositories.</p>
+      </div>
+    </div>
+    <div class="ach-item">
+      <span class="star-icon">✦</span>
+      <div>
+        <strong>Data Structures &amp; Algorithms</strong>
+        <p>Solved 200+ optimization-focused problems — Dynamic Programming, Graphs, and Trees.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="reveal">
+  <div class="eyebrow">Contact</div>
+  <h2>Let's build something</h2>
+  <p class="lede">Open to internships and collaborations in backend systems, AI infrastructure, and developer tooling.</p>
+  <a class="btn-primary" href="mailto:subhranandi20@gmail.com">subhranandi20@gmail.com</a>
+</section>
+
+<footer>
+  <div class="foot-links">
+    <a href="https://github.com/Subhra-Nandi" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://linkedin.com/in/subhra-nandi" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:subhranandi20@gmail.com">Email</a>
+  </div>
+  © 2026 Subhra Nandi. Built with HTML, CSS, and a bit of starlight.
+</footer>
+
+<script>
+  // ---------- Starfield canvas ----------
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let stars = [];
+  let shootingStars = [];
+
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = document.documentElement.scrollHeight;
+  }
+
+  function initStars(){
+    stars = [];
+    const count = Math.floor((canvas.width * canvas.height) / 9000);
+    for(let i=0;i<count;i++){
+      stars.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*1.3 + 0.3,
+        phase: Math.random()*Math.PI*2,
+        speed: Math.random()*0.015 + 0.005
+      });
+    }
+  }
+
+  function maybeSpawnShootingStar(){
+    if(reduceMotion) return;
+    if(Math.random() < 0.006 && shootingStars.length < 2){
+      const startX = Math.random()*canvas.width*0.6;
+      const startY = Math.random()*canvas.height*0.4;
+      shootingStars.push({x:startX, y:startY, len:0, maxLen: 90+Math.random()*60, vx: 6+Math.random()*4, vy: 2+Math.random()*2, life:0});
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(const s of stars){
+      s.phase += s.speed;
+      const tw = reduceMotion ? 0.85 : 0.55 + Math.sin(s.phase)*0.45;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(241,245,249,${tw})`;
+      ctx.fill();
+    }
+
+    maybeSpawnShootingStar();
+    shootingStars.forEach(st=>{
+      st.x += st.vx;
+      st.y += st.vy;
+      st.life += 1;
+      const grad = ctx.createLinearGradient(st.x, st.y, st.x - st.vx*8, st.y - st.vy*8);
+      grad.addColorStop(0, 'rgba(255,255,255,0.9)');
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(st.x, st.y);
+      ctx.lineTo(st.x - st.vx*8, st.y - st.vy*8);
+      ctx.stroke();
+    });
+    shootingStars = shootingStars.filter(st => st.life < 70 && st.y < canvas.height);
+
+    if(!reduceMotion) requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', ()=>{ resize(); initStars(); });
+  resize();
+  initStars();
+  draw();
+  if(reduceMotion){
+    // static render once more after layout settles
+    setTimeout(()=>{ resize(); initStars(); draw(); }, 300);
+  }
+
+  // ---------- Scroll reveal ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('in-view');
+    });
+  }, {threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // ---------- Dot nav active state + click scroll ----------
+  const dotButtons = document.querySelectorAll('#dotnav button');
+  const sections = document.querySelectorAll('section[id]');
+
+  dotButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const target = document.getElementById(btn.dataset.target);
+      if(target) target.scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth'});
+    });
+  });
+
+  const navObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        dotButtons.forEach(b=>b.classList.remove('active'));
+        const match = document.querySelector(`#dotnav button[data-target="${entry.target.id}"]`);
+        if(match) match.classList.add('active');
+      }
+    });
+  }, {threshold:0.4});
+  sections.forEach(s=>navObserver.observe(s));
+</script>
+
+</body>
+</html>
