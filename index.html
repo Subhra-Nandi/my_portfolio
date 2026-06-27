@@ -362,6 +362,10 @@
     margin-bottom:10px;
     display:block;
   }
+  .card .pr-tag[href]:hover{
+    text-decoration:underline;
+    color:var(--solar-gold);
+  }
   .card h3{
     font-family:var(--font-display);
     font-size:1.18rem;
@@ -629,19 +633,19 @@
 
   <div class="card-grid">
     <div class="card">
-      <span class="pr-tag">PR #148</span>
+      <a class="pr-tag" href="https://github.com/hushh-labs/hushh-research/pull/439" target="_blank" rel="noopener">PR #148 →</a>
       <h3>Kai Voice Agent System Prompt</h3>
       <p>Engineered a strict five-section system prompt that locks down identity, scopes vault data access, verifies consent, and keeps responses under 40 words for voice.</p>
       <p class="impact">Eliminated off-topic responses and made consent-first data access the default.</p>
     </div>
     <div class="card">
-      <span class="pr-tag">PR #374</span>
+      <a class="pr-tag" href="https://github.com/hushh-labs/hushh-research/pull/454" target="_blank" rel="noopener">PR #374 →</a>
       <h3>KYC Artifact Write Path &amp; UI</h3>
       <p>Built a secure write path for KYC data with token enforcement, then wired the React onboarding flow to live PKM vault data — no more hardcoded states.</p>
       <p class="impact">Enabled real-time verification tracking with encrypted, audit-trailed storage.</p>
     </div>
     <div class="card">
-      <span class="pr-tag">PR #138</span>
+      <a class="pr-tag" href="https://github.com/hushh-labs/hushh-research/pull/528" target="_blank" rel="noopener">PR #138 →</a>
       <h3>Frictionless Verdict UI</h3>
       <p>Built a React component that surfaces an instant Buy / Hold / Sell verdict straight from existing data — no new API calls required.</p>
       <p class="impact">Turned a multi-step analysis into a one-tap decision.</p>
